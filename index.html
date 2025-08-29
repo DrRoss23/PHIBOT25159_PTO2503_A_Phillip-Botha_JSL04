@@ -1,0 +1,107 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Using same JSL03 font + styles as the visual base -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon.svg" />
+    <!-- Swap to our single-file JS for JSL04 -->
+    <script defer src="scripts.js"></script>
+    <title>Kanban Task Management</title>
+  </head>
+
+  <body>
+    <!-- JSL03 Sidebar kept as-is (visual base) -->
+    <nav class="side-bar" id="side-bar-div">
+      <div id="side-logo-div">
+        <img id="logo" src="./assets/logo-light.svg" alt="logo-light" />
+      </div>
+
+      <div class="boards-nav-links-div" id="boards-nav-links-div">
+        <h4 id="headline-sidepanel">ALL BOARDS (1)</h4>
+        <button class="board-btn">Launch Career</button>
+      </div>
+    </nav>
+
+    <div id="layout">
+      <header id="header" class="sticky-header">
+        <div class="header-name-div">
+          <img src="./assets/favicon.svg" alt="logo-mobile" class="logo-mobile" />
+          <h2 class="header-board-name" id="header-board-name">Launch Career</h2>
+        </div>
+      </header>
+
+      <div class="container">
+        <main class="card-column-main">
+          <!-- Column: TODO (status 'todo' per JSL03) -->
+          <div class="column-div" data-status="todo">
+            <div id="todo-head-div" class="column-head-div">
+              <span class="dot" id="todo-dot"></span>
+              <h4 id="toDoText" class="columnHeader">TODO</h4>
+            </div>
+            <!-- JS will inject .task-div items here -->
+            <div class="tasks-container" id="todo-list"></div>
+          </div>
+
+          <!-- Column: DOING (status 'doing') -->
+          <div class="column-div" data-status="doing">
+            <div id="doing-head-div" class="column-head-div">
+              <span class="dot" id="doing-dot"></span>
+              <h4 id="doingText" class="columnHeader">DOING</h4>
+            </div>
+            <!-- JS will inject .task-div items here -->
+            <div class="tasks-container" id="doing-list"></div>
+          </div>
+
+          <!-- Column: DONE (status 'done') -->
+          <div class="column-div" data-status="done">
+            <div id="done-head-div" class="column-head-div">
+              <span class="dot" id="done-dot"></span>
+              <h4 id="doneText" class="columnHeader">DONE</h4>
+            </div>
+            <!-- JS will inject .task-div items here -->
+            <div class="tasks-container" id="done-list"></div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Modal skeleton (styled in next commit). Kept simple and close to Figma intent -->
+    <div id="backdrop" hidden></div>
+    <dialog id="taskModal">
+      <form method="dialog" id="taskForm">
+        <header style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+          <h3 style="margin:0;font-size:1.1rem;">Edit Task</h3>
+          <button type="button" id="closeBtn" aria-label="Close">✕</button>
+        </header>
+
+        <div style="display:grid;gap:10px;margin-top:10px;">
+          <label>
+            Title
+            <input id="titleInput" type="text" required />
+          </label>
+
+          <label>
+            Description
+            <textarea id="descInput" rows="5" required></textarea>
+          </label>
+
+          <label>
+            Status
+            <!-- Status values match JSL03: todo | doing | done -->
+            <select id="statusSelect">
+              <option value="todo">To Do</option>
+              <option value="doing">Doing</option>
+              <option value="done">Done</option>
+            </select>
+          </label>
+        </div>
+
+        <footer style="margin-top:12px;display:flex;justify-content:flex-end;gap:8px;">
+          <button type="submit" id="saveBtn">Save</button>
+        </footer>
+      </form>
+    </dialog>
+  </body>
+</html>

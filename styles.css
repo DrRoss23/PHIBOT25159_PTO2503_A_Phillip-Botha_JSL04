@@ -1,36 +1,43 @@
 /* ========================
    Global & Root Variables
-======================== */
+   ========================
+   These global rules apply everywhere. Root variables
+   act like "constants" that I can reuse throughout CSS.
+*/
 * {
   box-sizing: border-box; /* Ensures padding and border are included in total element size */
 }
 
 :root {
-  --primary-color: #ffffff;
-  --secondary-color: #f4f7fd;
-  --primary-font-color: #000000;
-  --secondary-font-color: #828fa3;
+  --primary-color: #ffffff;              /* White background for cards/headers */
+  --secondary-color: #f4f7fd;            /* Light grey background for app body */
+  --primary-font-color: #000000;         /* Main text color */
+  --secondary-font-color: #828fa3;       /* Muted text color for sub-headings */
   --primary-box-shadow: 0px 4px 6px rgba(54, 78, 126, 0.1015); /* Subtle shadow for card depth */
-  --sidebar-width: 300px; /* Sidebar fixed width */
+  --sidebar-width: 300px;                /* Sidebar fixed width */
 }
 
 /* ================
    Base Elements
-================ */
+   ================
+   Body controls the overall layout and look.
+*/
 body {
-  font-family: "Plus Jakarta Sans", sans-serif;
-  display: flex; /* Allow layout to span horizontally */
+  font-family: "Plus Jakarta Sans", sans-serif; /* Use same font as Figma */
+  display: flex;            /* Place sidebar and main layout side by side */
   flex-direction: row;
   width: 100%;
-  min-height: 100vh;
-  margin: 0;
+  min-height: 100vh;        /* Full viewport height */
+  margin: 0;                /* Remove default margin */
   background-color: var(--secondary-color);
-  font-size: 1rem; /* Base font size for rem scaling */
+  font-size: 1rem;          /* Base font size for scaling */
 }
 
 /* ================
    Sidebar Layout
-================ */
+   ================
+   Left vertical bar for logo and board buttons
+*/
 .side-bar {
   display: flex;
   flex-direction: column;
@@ -41,7 +48,7 @@ body {
 }
 
 #side-logo-div {
-  margin: 33px 113px 54px 34px; /* Spacing around logo */
+  margin: 33px 113px 54px 34px; /* Space around logo */
   display: flex;
   justify-content: flex-start;
 }
@@ -57,49 +64,49 @@ body {
 }
 
 #headline-sidepanel {
-  padding: 0 12px 0 50px; /* Aligns section content from left and right */
+  padding: 0 12px 0 50px; /* Aligns section heading */
 }
 
 h4 {
   color: var(--secondary-font-color);
   font-size: 0.75rem;
-  letter-spacing: 0.125rem; /* Makes heading more spaced */
+  letter-spacing: 0.125rem; /* Adds spacing between letters */
 }
 
 .board-btn {
   font-family: inherit;
   display: flex;
   align-items: center;
-  gap: 10px; /* Space between icon and text */
-  background-color: #635fc7;
+  gap: 10px;              /* Space between icon and text */
+  background-color: #635fc7; /* Primary purple button */
   color: #fff;
   border: none;
-  border-radius: 0 100px 100px 0; /* Pill shape only on right side */
+  border-radius: 0 100px 100px 0; /* Pill shape with rounded right side */
   height: 48px;
   width: 276px;
   padding: 28px 12px 28px 50px;
   font-size: 0.9375rem;
   font-weight: bold;
   cursor: pointer;
-  overflow: hidden; /* Prevents overflowed text/icons from showing */
+  overflow: hidden;       /* Clip overflowing content */
 }
 
 /* ===============
    Main Layout
-================ */
+   =============== */
 #layout {
-  flex: 1; /* Fills remaining space beside sidebar */
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  flex: 1;                /* Take up remaining width next to sidebar */
+  overflow-x: hidden;     /* Prevent sideways scroll */
   width: 100%;
 }
 
 /* ===============
    Header Section
-================ */
+   =============== */
 header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between;   /* Title left, controls right */
   background-color: var(--primary-color);
   color: var(--primary-font-color);
   height: 96px;
@@ -116,12 +123,12 @@ header {
 }
 
 .logo-mobile {
-  display: none; /* Hidden on desktop; shown on smaller screens */
+  display: none; /* Only shown on smaller screens */
 }
 
 /* ===============
    Board Columns
-================ */
+   =============== */
 .container {
   display: flex;
   flex-direction: column;
@@ -131,10 +138,7 @@ header {
 
 .card-column-main {
   display: grid;
-  grid-template-columns: repeat(
-    3,
-    minmax(0, 304px)
-  ); /* 3 columns with min size */
+  grid-template-columns: repeat(3, minmax(0, 304px)); /* 3 equal columns */
   gap: 8px; /* Space between columns */
 }
 
@@ -159,29 +163,21 @@ header {
   margin: 0;
 }
 
-/* Status Dots */
+/* Status Dots: colored circles in column headers */
 .dot {
   height: 15px;
   width: 15px;
-  border-radius: 50%; /* Make it circular */
+  border-radius: 50%; /* Circle shape */
   display: inline-block;
 }
 
-#todo-dot {
-  background-color: #49c4e5;
-}
-
-#doing-dot {
-  background-color: #8471f2;
-}
-
-#done-dot {
-  background-color: #219c90;
-}
+#todo-dot { background-color: #49c4e5; }   /* Blue for TODO */
+#doing-dot { background-color: #8471f2; }  /* Purple for DOING */
+#done-dot { background-color: #219c90; }   /* Green for DONE */
 
 /* ===============
    Task Cards
-================ */
+   =============== */
 .tasks-container {
   display: flex;
   flex-direction: column;
@@ -197,7 +193,7 @@ header {
   color: var(--primary-font-color);
   border-radius: 12px;
   box-shadow: var(--primary-box-shadow);
-  cursor: pointer; /* Indicate it's clickable */
+  cursor: pointer; /* Indicates clickable */
   margin-bottom: 20px;
   font-size: 0.9375rem;
   font-weight: bold;
@@ -205,7 +201,7 @@ header {
 
 /* ===============
    Headings
-================ */
+   =============== */
 h2 {
   font-size: 1.5rem;
   margin: 0;
@@ -213,34 +209,32 @@ h2 {
 
 /* ========================
    Responsive Styles
-======================== */
+   ========================
+   Adjust layout for tablets and mobiles
+*/
 
 /******** Tablets ********/
 @media screen and (max-width: 1023px) {
   .side-bar {
-    display: none; /* Hide sidebar on tablets and smaller */
+    display: none; /* Hide sidebar on tablets */
   }
 
   .side-bar.show-sidebar {
     display: flex !important;
-    position: fixed; /* Overlay on top of page */
+    position: fixed; /* Overlay instead of full height */
     height: auto;
   }
 
-  #side-logo-div {
-    display: none;
-  }
+  #side-logo-div { display: none; }
 
   .logo-mobile {
-    display: block;
+    display: block; /* Show small logo in header */
     width: 30px;
     height: 30px;
     margin-right: 10px;
   }
 
-  body {
-    font-size: 0.8rem;
-  }
+  body { font-size: 0.8rem; }
 
   .board-btn {
     font-size: 0.8rem;
@@ -252,7 +246,7 @@ h2 {
   .container {
     padding: 0;
     width: 100%;
-    align-items: center; /* Center columns on smaller screens */
+    align-items: center; /* Center the columns */
   }
 
   .card-column-main {
@@ -266,42 +260,26 @@ h2 {
     border: none;
   }
 
-  #header-board-name {
-    font-size: 1rem;
-  }
+  #header-board-name { font-size: 1rem; }
 
-  .task-div {
-    width: 100%;
-  }
+  .task-div { width: 100%; }
 
-  .columnHeader {
-    font-size: 0.75rem;
-  }
+  .columnHeader { font-size: 0.75rem; }
 
   .dot {
     height: 8px;
     width: 8px;
   }
 
-  .column-head-div {
-    gap: 8px;
-  }
-
-  .column-div {
-    width: 100%;
-  }
+  .column-head-div { gap: 8px; }
+  .column-div { width: 100%; }
 }
 
 /******** Mobile ********/
 @media screen and (max-width: 576px) {
   .card-column-main {
-    grid-template-columns: minmax(
-      0,
-      380px
-    ); /* Stack columns in single column */
+    grid-template-columns: minmax(0, 380px); /* Stack into one column */
   }
 
-  .column-div {
-    padding: 24px;
-  }
+  .column-div { padding: 24px; }
 }

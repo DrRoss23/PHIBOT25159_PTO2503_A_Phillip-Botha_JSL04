@@ -2,17 +2,44 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Using same JSL03 font + styles as the visual base -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+    <!--
+      JSL04 — Index HTML (based on my JSL03 layout)
+      ------------------------------------------------
+      I am reusing the same visual structure and classes from JSL03 so it
+      already matches the Figma look. JavaScript (scripts.js) will inject
+      task cards into the empty containers with ids: todo-list, doing-list,
+      and done-list. The modal is placed at the bottom of <body>.
+    -->
+
+    <!-- Google font used in JSL03 so styling looks consistent -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Main stylesheet from JSL03 (I keep using it as my base) -->
     <link rel="stylesheet" href="./styles.css" />
+
+    <!-- Small site icon (optional but looks professional) -->
     <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon.svg" />
-    <!-- Swap to our single-file JS for JSL04 -->
+
+    <!--
+      I load ONE JavaScript file for this project (scripts.js).
+      I use `defer` so the HTML loads first; then JS runs and finds
+      the elements by id to render tasks and handle the modal.
+    -->
     <script defer src="scripts.js"></script>
+
     <title>Kanban Task Management</title>
   </head>
 
   <body>
-    <!-- JSL03 Sidebar kept as-is (visual base) -->
+    <!--
+      LEFT SIDEBAR (kept from JSL03)
+      - The sidebar contains the app logo and a simple boards list.
+      - These classes and ids match my JSL03 CSS so I don't have to
+        restyle anything here.
+    -->
     <nav class="side-bar" id="side-bar-div">
       <div id="side-logo-div">
         <img id="logo" src="./assets/logo-light.svg" alt="logo-light" />
@@ -24,7 +51,13 @@
       </div>
     </nav>
 
+    <!--
+      MAIN LAYOUT WRAPPER
+      - Contains the sticky header and the three Kanban columns.
+      - The structure mirrors JSL03 so my existing CSS rules apply.
+    -->
     <div id="layout">
+      <!-- Top header: board name/title area (sticky in my CSS) -->
       <header id="header" class="sticky-header">
         <div class="header-name-div">
           <img src="./assets/favicon.svg" alt="logo-mobile" class="logo-mobile" />
@@ -33,6 +66,13 @@
       </header>
 
       <div class="container">
+        <!--
+          KANBAN BOARD COLUMNS
+          - I keep the three columns (TODO, DOING, DONE).
+          - Each column has a heading area and an empty tasks container.
+          - JavaScript will append .task-div elements into the containers
+            with ids: #todo-list, #doing-list, #done-list
+        -->
         <main class="card-column-main">
           <!-- Column: TODO (status 'todo' per JSL03) -->
           <div class="column-div" data-status="todo">
@@ -67,15 +107,25 @@
       </div>
     </div>
 
-    <!-- Modal skeleton (styled in next commit). Kept simple and close to Figma intent -->
+    <!--
+      MODAL (edit task)
+      ------------------------------------------------
+      - Hidden by default. When I click a task card, scripts.js
+        fills these inputs and opens the dialog with a dark backdrop.
+      - Using native <dialog> keeps things simple.
+    -->
     <div id="backdrop" hidden></div>
     <dialog id="taskModal">
+      <!-- method="dialog" lets the dialog behave like a native modal -->
       <form method="dialog" id="taskForm">
+        <!-- Modal header: title on the left, a close (X) button on the right -->
         <header style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
           <h3 style="margin:0;font-size:1.1rem;">Edit Task</h3>
+          <!-- The X button closes the dialog without saving -->
           <button type="button" id="closeBtn" aria-label="Close">✕</button>
         </header>
 
+        <!-- Modal body: simple vertical form fields -->
         <div style="display:grid;gap:10px;margin-top:10px;">
           <label>
             Title
@@ -98,7 +148,9 @@
           </label>
         </div>
 
+        <!-- Modal footer: actions live on the right side -->
         <footer style="margin-top:12px;display:flex;justify-content:flex-end;gap:8px;">
+          <!-- Submitting the form triggers onSave() in scripts.js -->
           <button type="submit" id="saveBtn">Save</button>
         </footer>
       </form>

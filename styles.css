@@ -314,6 +314,16 @@ h2 {
   gap: 8px;
 }
 
+.modal-title {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+/* Prevent page from scrolling behind modal */
+.no-scroll {
+  overflow: hidden;
+}
+
 .modal-body {
   display: grid;
   gap: 10px;

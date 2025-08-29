@@ -115,12 +115,12 @@
       - Using native <dialog> keeps things simple.
     -->
     <div id="backdrop" hidden></div>
-    <dialog id="taskModal">
+    <dialog id="taskModal" aria-labelledby="modalTitle" role="dialog">
       <!-- method="dialog" lets the dialog behave like a native modal -->
       <form method="dialog" id="taskForm">
         <!-- Modal header: title on the left, a close (X) button on the right -->
         <header class="modal-header">
-          <h3 class="modal-title">Edit Task</h3>
+          <h3 class="modal-title" id="modalTitle">Edit Task</h3>
           <!-- The X button closes the dialog without saving -->
           <button type="button" id="closeBtn" aria-label="Close">✕</button>
         </header>

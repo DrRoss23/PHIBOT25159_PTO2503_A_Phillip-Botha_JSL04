@@ -319,6 +319,26 @@ h2 {
   font-size: 1.1rem;
 }
 
+/* Modal close button (visible, simple, Figma-like) */
+#closeBtn {
+  background: none;          /* no background by default */
+  border: none;              /* remove default button border */
+  font-size: 1.2rem;         /* make the ✕ large enough */
+  cursor: pointer;           /* pointer cursor to show it's clickable */
+  color: #828fa3;            /* muted gray to match design */
+  border-radius: 50%;        /* circular hit area */
+  padding: 4px 8px;          /* small clickable area */
+  line-height: 1;            /* keep the icon centered */
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+#closeBtn:hover,
+#closeBtn:focus {
+  background: #f4f7fd;       /* light background on hover/focus */
+  color: #000;               /* darker ✕ for visibility */
+  outline: none;             /* remove default outline */
+}
+
 /* Prevent page from scrolling behind modal */
 .no-scroll {
   overflow: hidden;

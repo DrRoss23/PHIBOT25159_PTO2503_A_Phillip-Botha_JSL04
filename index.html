@@ -119,14 +119,14 @@
       <!-- method="dialog" lets the dialog behave like a native modal -->
       <form method="dialog" id="taskForm">
         <!-- Modal header: title on the left, a close (X) button on the right -->
-        <header style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-          <h3 style="margin:0;font-size:1.1rem;">Edit Task</h3>
+        <header class="modal-header">
+          <h3 class="modal-title">Edit Task</h3>
           <!-- The X button closes the dialog without saving -->
           <button type="button" id="closeBtn" aria-label="Close">✕</button>
         </header>
 
         <!-- Modal body: simple vertical form fields -->
-        <div style="display:grid;gap:10px;margin-top:10px;">
+        <div class="modal-body">
           <label>
             Title
             <input id="titleInput" type="text" required />
@@ -149,7 +149,7 @@
         </div>
 
         <!-- Modal footer: actions live on the right side -->
-        <footer style="margin-top:12px;display:flex;justify-content:flex-end;gap:8px;">
+        <footer class="modal-footer">
           <!-- Submitting the form triggers onSave() in scripts.js -->
           <button type="submit" id="saveBtn">Save</button>
         </footer>

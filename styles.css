@@ -283,3 +283,88 @@ h2 {
 
   .column-div { padding: 24px; }
 }
+
+/* =============================
+   Modal & Backdrop (moved from inline HTML)
+   ============================= */
+#backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 9;
+}
+
+#taskModal {
+  border: 0;
+  border-radius: 12px;
+  padding: 16px;
+  width: min(560px, calc(100% - 2rem));
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+#taskModal[open] {
+  z-index: 10;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-body {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.modal-footer {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Keep form controls tidy inside modal */
+#taskForm label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+#taskForm input[type="text"],
+#taskForm textarea,
+#taskForm select {
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid #e4ebfa;
+  border-radius: 8px;
+  background: #fff;
+}
+
+#taskForm button {
+  font: inherit;
+  padding: 8px 12px;
+  border: 1px solid #e4ebfa;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+
+#taskForm button:hover {
+  background: #f4f7fd;
+}
+
+/* ===== Form validation helpers (simple and clear) ===== */
+.field-error {
+  color: #d14343;              /* Friendly red for errors */
+  font-size: 0.8rem;           /* Slightly smaller than body */
+  margin: 4px 0 0;             /* Tight spacing under inputs */
+}
+
+.input-error {
+  border-color: #d14343 !important; /* Red outline to signal error */
+  outline: 2px solid rgba(209, 67, 67, 0.15);
+}

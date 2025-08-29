@@ -48,6 +48,11 @@ var statusSelect = document.getElementById("statusSelect");
 var closeBtn = document.getElementById("closeBtn");
 var saveBtn = document.getElementById("saveBtn");
 
+// Error message elements for simple validation feedback (HTML placeholders).
+// These are <p> tags we added under each input in index.html.
+var titleError = document.getElementById("titleError");
+var descError = document.getElementById("descError");
+
 // This will remember which task I am editing right now. If it's null,
 // no task is being edited and the modal should be closed.
 var activeTaskId = null;
@@ -88,10 +93,12 @@ function makeTaskCard(task) {
 }
 
 /**
- * clearColumns()
- * --------------
- * Purpose: Before I re-render the board, I need the columns to be empty.
- * This function wipes the contents of all three column containers.
+ * clearColumns
+ * ------------
+ * Purpose: Empty all three column containers before re-rendering the board.
+ * This ensures I don't accidentally duplicate cards when drawing the UI.
+ *
+ * @returns {void}
  */
 function clearColumns() {
   todoList.innerHTML = "";  // remove everything in the TODO column
@@ -100,12 +107,14 @@ function clearColumns() {
 }
 
 /**
- * renderBoard()
- * -------------
- * Purpose: Rebuild the entire board from the tasks array.
- * 1) Clear the columns.
- * 2) For each task, make a card and append it to the correct column
- *    based on the task.status value (todo/doing/done).
+ * renderBoard
+ * -----------
+ * Purpose: Rebuild the entire board from the current `tasks` array.
+ * Steps:
+ * 1) Clear all columns.
+ * 2) For each task, build a card and append it to the column that matches its status.
+ *
+ * @returns {void}
  */
 function renderBoard() {
   clearColumns(); // start with a clean board every time I render
@@ -136,6 +145,59 @@ function renderBoard() {
 renderBoard();
 
 /* =============================
+   4.5) SIMPLE VALIDATION HELPERS
+   ============================= */
+/**
+ * showError
+ * ----------
+ * Purpose: Display a small red error message under a specific input and
+ *          add a red outline to the input to make the problem clear.
+ *
+ * @param {HTMLElement} inputEl - The input or textarea element to decorate with an error state.
+ * @param {HTMLElement} errorEl - The <p> element where the error text is shown.
+ * @param {string} message - The short, human-friendly error message to show.
+ */
+function showError(inputEl, errorEl, message) {
+  if (errorEl) {
+    errorEl.textContent = message;   // set the text to the provided message
+    errorEl.hidden = false;          // reveal the small <p> under the field
+  }
+  if (inputEl) {
+    inputEl.classList.add("input-error"); // add red border style
+    inputEl.setAttribute("aria-invalid", "true"); // for accessibility
+  }
+}
+
+/**
+ * clearError
+ * ----------
+ * Purpose: Hide the error text and remove the red outline state from a field.
+ *
+ * @param {HTMLElement} inputEl - The input or textarea element currently marked with an error.
+ * @param {HTMLElement} errorEl - The <p> element that shows the error text.
+ */
+function clearError(inputEl, errorEl) {
+  if (errorEl) {
+    errorEl.hidden = true; // hide the message
+  }
+  if (inputEl) {
+    inputEl.classList.remove("input-error"); // remove red border
+    inputEl.removeAttribute("aria-invalid"); // reset accessibility attribute
+  }
+}
+
+/**
+ * clearErrors
+ * -----------
+ * Purpose: Convenience helper that clears ALL known field errors in the modal
+ *          (currently title and description). Useful before re-validating.
+ */
+function clearErrors() {
+  clearError(titleInput, titleError);
+  clearError(descInput, descError);
+}
+
+/* =============================
    5) MODAL (open, fill, save, close)
    ============================= */
 /**
@@ -146,6 +208,7 @@ renderBoard();
  * user can edit the details.
  *
  * @param {number} taskId - the id of the task that was clicked
+ * @returns {void}
  */
 function openModal(taskId) {
   // 1) Find the matching task object by id using a basic loop
@@ -167,6 +230,9 @@ function openModal(taskId) {
   descInput.value = found.description;     // textarea for the description
   statusSelect.value = found.status;       // select dropdown value
 
+  // Reset any previous error messages so the modal looks clean
+  clearErrors();
+
   // 4) Finally, show the modal and turn on the semi-transparent
   // backdrop to focus the user's attention on the dialog.
   backdrop.hidden = false;                 // make the dark overlay visible
@@ -181,10 +247,12 @@ function openModal(taskId) {
 }
 
 /**
- * closeModal()
- * ------------
- * Purpose: Hide the modal and backdrop, and reset the activeTaskId
- * so the app no longer thinks I'm editing anything.
+ * closeModal
+ * ----------
+ * Purpose: Hide the modal and backdrop, and reset `activeTaskId` so
+ * the app no longer thinks I'm editing anything.
+ *
+ * @returns {void}
  */
 function closeModal() {
   activeTaskId = null;    // I am no longer editing a specific task
@@ -206,12 +274,13 @@ function closeModal() {
  * Steps:
  * 1) Stop the browser reloading the page.
  * 2) Read the values from the inputs.
- * 3) Validate that title and description are not empty.
+ * 3) Validate that title and description are not empty (show inline errors).
  * 4) Find the matching task by id and update its fields.
  * 5) Re-render the board so the user sees the change.
  * 6) Close the modal.
  *
  * @param {SubmitEvent} e - the submit event from the form
+ * @returns {void}
  */
 function onSave(e) {
   e.preventDefault(); // stop the form from navigating/reloading the page
@@ -223,9 +292,20 @@ function onSave(e) {
   var newDesc = descInput.value.trim();
   var newStatus = statusSelect.value; // this will be "todo", "doing", or "done"
 
-  // 2) Very basic validation for this project: both fields required.
-  if (!newTitle || !newDesc) {
-    alert("Please fill in both title and description.");
+  // 2) Friendly validation: show inline messages + focus first invalid field
+  clearErrors(); // reset any previous errors before checking again
+  var hasError = false;
+  if (!newTitle) {
+    showError(titleInput, titleError, "Title is required.");
+    if (!hasError) { titleInput.focus(); } // focus the first invalid input
+    hasError = true;
+  }
+  if (!newDesc) {
+    showError(descInput, descError, "Description is required.");
+    if (!hasError) { descInput.focus(); }
+    hasError = true;
+  }
+  if (hasError) {
     return; // stop the save if validation fails
   }
 
@@ -247,7 +327,9 @@ function onSave(e) {
   closeModal();
 }
 
-/* Wire up modal events once (these are global listeners) */
+/* =============================
+   6) EVENT LISTENERS (wiring once)
+   ============================= */
 // When I submit the form (press the Save button or Enter), run onSave
 form.addEventListener("submit", onSave);
 
@@ -257,7 +339,20 @@ closeBtn.addEventListener("click", closeModal);
 // Clicking the dark backdrop also closes the modal
 backdrop.addEventListener("click", closeModal);
 
-// Bonus: pressing Escape should close the modal if it’s open
+// As I type, remove the red/error state so the form feels friendly
+titleInput.addEventListener("input", function () {
+  if (titleInput.value.trim()) {
+    clearError(titleInput, titleError);
+  }
+});
+
+descInput.addEventListener("input", function () {
+  if (descInput.value.trim()) {
+    clearError(descInput, descError);
+  }
+});
+
+// Bonus: pressing Escape should close the modal if it’s open.
 // (Only works when I'm currently editing a task.)
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape" && activeTaskId != null) {

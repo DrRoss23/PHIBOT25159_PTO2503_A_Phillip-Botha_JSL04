@@ -21,11 +21,57 @@
 // controls which column it shows in (todo/doing/done).
 // Note: I can later replace this with the exact initialData
 // from the brief, but for now I’m keeping it small for testing.
-var tasks = [
-  { id: 1, title: "Launch Epic Career", description: "Create a killer Resume", status: "todo" },
-  { id: 2, title: "Master JavaScript", description: "Get comfortable with the fundamentals", status: "doing" },
-  { id: 3, title: "Contribute to Open Source Projects", description: "Gain practical experience and collaborate with others", status: "done" }
+
+// Official initial data from the brief (kept as a constant-like variable)
+// Note: I’m using `var` to keep style consistent and beginner-friendly.
+var initialTasks = [
+  {
+    id: 1,
+    title: "Launch Epic Career 🚀",
+    description: "Create a killer Resume",
+    status: "todo",
+  },
+  {
+    id: 2,
+    title: "Master JavaScript 💛",
+    description: "Get comfortable with the fundamentals",
+    status: "doing",
+  },
+  {
+    id: 3,
+    title: "Keep on Going 🏆",
+    description: "You're almost there",
+    status: "doing",
+  },
+
+  {
+    id: 11,
+    title: "Learn Data Structures and Algorithms 📚",
+    description:
+      "Study fundamental data structures and algorithms to solve coding problems efficiently",
+    status: "todo",
+  },
+  {
+    id: 12,
+    title: "Contribute to Open Source Projects 🌐",
+    description:
+      "Gain practical experience and collaborate with others in the software development community",
+    status: "done",
+  },
+  {
+    id: 13,
+    title: "Build Portfolio Projects 🛠️",
+    description:
+      "Create a portfolio showcasing your skills and projects to potential employers",
+    status: "done",
+  },
 ];
+
+// Make a working copy I can safely edit during the session (so I don’t mutate the original list)
+var tasks = [];
+for (var i = 0; i < initialTasks.length; i++) {
+  tasks.push(initialTasks[i]);
+}
 
 /* =============================
    2) DOM REFERENCES
@@ -107,6 +153,32 @@ function clearColumns() {
 }
 
 /**
+ * normalizeStatus
+ * ---------------
+ * Purpose: Convert any status variants (like "in-progress" or "in progress")
+ * into the value my UI uses ("doing"). Other statuses pass through unchanged.
+ *
+ * Why: Some briefs or seed data use different text. Normalizing here keeps the
+ * board logic and <select> options consistent (todo/doing/done) without needing
+ * to change the original data array.
+ *
+ * @param {string} raw - incoming status from initial data or edited task
+ * @returns {string}   - one of "todo" | "doing" | "done" (defaults to "todo")
+ */
+function normalizeStatus(raw) {
+  if (!raw) return "todo";
+  var s = String(raw).toLowerCase().trim();
+  if (s === "in-progress" || s === "in progress" || s === "inprogress") {
+    return "doing";
+  }
+  if (s === "todo" || s === "doing" || s === "done") {
+    return s;
+  }
+  // If something unexpected comes in, default it to "todo" so it shows up.
+  return "todo";
+}
+
+/**
  * renderBoard
  * -----------
  * Purpose: Rebuild the entire board from the current `tasks` array.
@@ -124,16 +196,15 @@ function renderBoard() {
     var t = tasks[i];                 // get the current task object
     var card = makeTaskCard(t);       // build a small card for it
 
-    // Decide which column to use based on the status string
-    if (t.status === "todo") {
+    // Decide which column to use based on a normalized status string
+    var s = normalizeStatus(t.status);
+    if (s === "todo") {
       todoList.appendChild(card);
-    } else if (t.status === "doing") {
+    } else if (s === "doing") {
       doingList.appendChild(card);
-    } else if (t.status === "done") {
+    } else if (s === "done") {
       doneList.appendChild(card);
     }
-    // If the status was something unexpected, I simply don't append it.
-    // (Not required here, but good to know what happens.)
   }
 }
 
@@ -228,7 +299,7 @@ function openModal(taskId) {
   // user can see and edit them. These map directly to the object.
   titleInput.value = found.title;          // text input for the title
   descInput.value = found.description;     // textarea for the description
-  statusSelect.value = found.status;       // select dropdown value
+  statusSelect.value = normalizeStatus(found.status); // ensure dropdown shows a UI-friendly value
 
   // Reset any previous error messages so the modal looks clean
   clearErrors();

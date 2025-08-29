@@ -316,7 +316,8 @@ h2 {
 
 .modal-title {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.25rem;  /* larger, clearer modal heading */
+  font-weight: 600;    /* semi-bold like Figma headings */
 }
 
 /* Modal close button (visible, simple, Figma-like) */
@@ -361,7 +362,8 @@ h2 {
 #taskForm label {
   display: grid;
   gap: 6px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;               /* slightly smaller, subtle labels */
+  color: var(--secondary-font-color); /* muted label color to match design */
 }
 
 #taskForm input[type="text"],
@@ -384,6 +386,29 @@ h2 {
 }
 
 #taskForm button:hover {
+  background: #f4f7fd;
+}
+
+/* Footer action buttons to match Figma */
+#taskForm .btn-primary {
+  background: #635fc7; /* primary purple */
+  color: #fff;
+  border: none;
+}
+
+#taskForm .btn-primary:hover,
+#taskForm .btn-primary:focus {
+  background: #4b48a3; /* darker on hover/focus */
+}
+
+#taskForm .btn-secondary {
+  background: transparent;
+  border: 1px solid #e4ebfa;
+  color: var(--primary-font-color);
+}
+
+#taskForm .btn-secondary:hover,
+#taskForm .btn-secondary:focus {
   background: #f4f7fd;
 }
 

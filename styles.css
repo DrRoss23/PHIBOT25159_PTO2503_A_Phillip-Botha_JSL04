@@ -389,28 +389,6 @@ h2 {
   background: #f4f7fd;
 }
 
-/* Footer action buttons to match Figma */
-#taskForm .btn-primary {
-  background: #635fc7; /* primary purple */
-  color: #fff;
-  border: none;
-}
-
-#taskForm .btn-primary:hover,
-#taskForm .btn-primary:focus {
-  background: #4b48a3; /* darker on hover/focus */
-}
-
-#taskForm .btn-secondary {
-  background: transparent;
-  border: 1px solid #e4ebfa;
-  color: var(--primary-font-color);
-}
-
-#taskForm .btn-secondary:hover,
-#taskForm .btn-secondary:focus {
-  background: #f4f7fd;
-}
 
 /* ===== Form validation helpers (simple and clear) ===== */
 .field-error {

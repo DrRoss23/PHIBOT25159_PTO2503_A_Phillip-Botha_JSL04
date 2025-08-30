@@ -5,9 +5,9 @@
   so the board already looks close to the Figma.
 
   🔰 Style choices for learning:
-  - I use simple `var` variables and classic `for` loops
-    instead of newer syntax. This keeps the code readable
-    for me while I’m learning and makes it easy to explain.
+  - I use modern `let` and `const` variables and classic `for` loops.
+    This keeps the code readable for me while I'm learning and 
+    follows modern JavaScript best practices.
   - I keep everything in ONE file (scripts.js) so I can scroll
     and see the full flow from data → render → modal.
   - Status values are "todo", "doing", "done" just like in JSL03.
@@ -20,11 +20,11 @@
 // with a unique id, a title, a description, and a status that
 // controls which column it shows in (todo/doing/done).
 // Note: I can later replace this with the exact initialData
-// from the brief, but for now I’m keeping it small for testing.
+// from the brief, but for now I'm keeping it small for testing.
 
 // Official initial data from the brief (kept as a constant-like variable)
-// Note: I’m using `var` to keep style consistent and beginner-friendly.
-var initialTasks = [
+// Note: I'm using `const` since this data shouldn't change.
+const initialTasks = [
   {
     id: 1,
     title: "Launch Epic Career 🚀",
@@ -67,9 +67,9 @@ var initialTasks = [
   },
 ];
 
-// Make a working copy I can safely edit during the session (so I don’t mutate the original list)
-var tasks = [];
-for (var i = 0; i < initialTasks.length; i++) {
+// Make a working copy I can safely edit during the session (so I don't mutate the original list)
+let tasks = [];
+for (let i = 0; i < initialTasks.length; i++) {
   tasks.push(initialTasks[i]);
 }
 
@@ -78,30 +78,30 @@ for (var i = 0; i < initialTasks.length; i++) {
    ============================= */
 // Grab references to the three column containers. I will insert
 // task cards into these using JavaScript.
-var todoList = document.getElementById("todo-list");   // holds tasks with status === "todo"
-var doingList = document.getElementById("doing-list"); // holds tasks with status === "doing"
-var doneList = document.getElementById("done-list");   // holds tasks with status === "done"
+const todoList = document.getElementById("todo-list");   // holds tasks with status === "todo"
+const doingList = document.getElementById("doing-list"); // holds tasks with status === "doing"
+const doneList = document.getElementById("done-list");   // holds tasks with status === "done"
 
 // Modal elements. The modal is hidden by default and opens when
 // the user clicks a task card. These references let me read/write
 // the form values and control opening/closing.
-var backdrop = document.getElementById("backdrop");
-var modal = document.getElementById("taskModal");
-var form = document.getElementById("taskForm");
-var titleInput = document.getElementById("titleInput");
-var descInput = document.getElementById("descInput");
-var statusSelect = document.getElementById("statusSelect");
-var closeBtn = document.getElementById("closeBtn");
-var saveBtn = document.getElementById("saveBtn");
+const backdrop = document.getElementById("backdrop");
+const modal = document.getElementById("taskModal");
+const form = document.getElementById("taskForm");
+const titleInput = document.getElementById("titleInput");
+const descInput = document.getElementById("descInput");
+const statusSelect = document.getElementById("statusSelect");
+const closeBtn = document.getElementById("closeBtn");
+const saveBtn = document.getElementById("saveBtn");
 
 // Error message elements for simple validation feedback (HTML placeholders).
 // These are <p> tags we added under each input in index.html.
-var titleError = document.getElementById("titleError");
-var descError = document.getElementById("descError");
+const titleError = document.getElementById("titleError");
+const descError = document.getElementById("descError");
 
 // This will remember which task I am editing right now. If it's null,
 // no task is being edited and the modal should be closed.
-var activeTaskId = null;
+let activeTaskId = null;
 
 /* =============================
    3) RENDER HELPERS
@@ -113,12 +113,12 @@ var activeTaskId = null;
  * The card shows just the task title on the board.
  * When the user clicks the card, I open the edit modal for that task.
  *
- * @param {Object} task - one task object from the tasks array
- * @returns {HTMLDivElement} - the card element ready to place in a column
+ * task - one task object from the tasks array
+ * Returns: the card element ready to place in a column
  */
 function makeTaskCard(task) {
   // Create the outer div that will represent the task on the board
-  var card = document.createElement("div");
+  const card = document.createElement("div");
 
   // Reuse my JSL03 class so it picks up the existing styles
   card.className = "task-div";
@@ -144,7 +144,7 @@ function makeTaskCard(task) {
  * Purpose: Empty all three column containers before re-rendering the board.
  * This ensures I don't accidentally duplicate cards when drawing the UI.
  *
- * @returns {void}
+ * Returns: nothing
  */
 function clearColumns() {
   todoList.innerHTML = "";  // remove everything in the TODO column
@@ -162,12 +162,12 @@ function clearColumns() {
  * board logic and <select> options consistent (todo/doing/done) without needing
  * to change the original data array.
  *
- * @param {string} raw - incoming status from initial data or edited task
- * @returns {string}   - one of "todo" | "doing" | "done" (defaults to "todo")
+ * raw - incoming status from initial data or edited task
+ * Returns: one of "todo" | "doing" | "done" (defaults to "todo")
  */
 function normalizeStatus(raw) {
   if (!raw) return "todo";
-  var s = String(raw).toLowerCase().trim();
+  const s = String(raw).toLowerCase().trim();
   if (s === "in-progress" || s === "in progress" || s === "inprogress") {
     return "doing";
   }
@@ -186,18 +186,18 @@ function normalizeStatus(raw) {
  * 1) Clear all columns.
  * 2) For each task, build a card and append it to the column that matches its status.
  *
- * @returns {void}
+ * Returns: nothing
  */
 function renderBoard() {
   clearColumns(); // start with a clean board every time I render
 
   // Loop over all tasks and add them to the right column
-  for (var i = 0; i < tasks.length; i++) {
-    var t = tasks[i];                 // get the current task object
-    var card = makeTaskCard(t);       // build a small card for it
+  for (let i = 0; i < tasks.length; i++) {
+    const t = tasks[i];                 // get the current task object
+    const card = makeTaskCard(t);       // build a small card for it
 
     // Decide which column to use based on a normalized status string
-    var s = normalizeStatus(t.status);
+    const s = normalizeStatus(t.status);
     if (s === "todo") {
       todoList.appendChild(card);
     } else if (s === "doing") {
@@ -224,9 +224,9 @@ renderBoard();
  * Purpose: Display a small red error message under a specific input and
  *          add a red outline to the input to make the problem clear.
  *
- * @param {HTMLElement} inputEl - The input or textarea element to decorate with an error state.
- * @param {HTMLElement} errorEl - The <p> element where the error text is shown.
- * @param {string} message - The short, human-friendly error message to show.
+ * inputEl - The input or textarea element to decorate with an error state.
+ * errorEl - The <p> element where the error text is shown.
+ * message - The short, human-friendly error message to show.
  */
 function showError(inputEl, errorEl, message) {
   if (errorEl) {
@@ -244,8 +244,8 @@ function showError(inputEl, errorEl, message) {
  * ----------
  * Purpose: Hide the error text and remove the red outline state from a field.
  *
- * @param {HTMLElement} inputEl - The input or textarea element currently marked with an error.
- * @param {HTMLElement} errorEl - The <p> element that shows the error text.
+ * inputEl - The input or textarea element currently marked with an error.
+ * errorEl - The <p> element that shows the error text.
  */
 function clearError(inputEl, errorEl) {
   if (errorEl) {
@@ -278,13 +278,13 @@ function clearErrors() {
  * with that task's data, and then show the modal + backdrop so the
  * user can edit the details.
  *
- * @param {number} taskId - the id of the task that was clicked
- * @returns {void}
+ * taskId - the id of the task that was clicked
+ * Returns: nothing
  */
 function openModal(taskId) {
   // 1) Find the matching task object by id using a basic loop
-  var found = null; // will hold the task if I find it
-  for (var i = 0; i < tasks.length; i++) {
+  let found = null; // will hold the task if I find it
+  for (let i = 0; i < tasks.length; i++) {
     if (tasks[i].id === taskId) {
       found = tasks[i];
       break; // stop searching as soon as I find the task
@@ -323,7 +323,7 @@ function openModal(taskId) {
  * Purpose: Hide the modal and backdrop, and reset `activeTaskId` so
  * the app no longer thinks I'm editing anything.
  *
- * @returns {void}
+ * Returns: nothing
  */
 function closeModal() {
   activeTaskId = null;    // I am no longer editing a specific task
@@ -350,8 +350,8 @@ function closeModal() {
  * 5) Re-render the board so the user sees the change.
  * 6) Close the modal.
  *
- * @param {SubmitEvent} e - the submit event from the form
- * @returns {void}
+ * e - the submit event from the form
+ * Returns: nothing
  */
 function onSave(e) {
   e.preventDefault(); // stop the form from navigating/reloading the page
@@ -359,13 +359,13 @@ function onSave(e) {
 
   // 1) Read values from the form inputs. I also trim spaces off
   // the ends of the title/description so empty strings are caught.
-  var newTitle = titleInput.value.trim();
-  var newDesc = descInput.value.trim();
-  var newStatus = statusSelect.value; // this will be "todo", "doing", or "done"
+  const newTitle = titleInput.value.trim();
+  const newDesc = descInput.value.trim();
+  const newStatus = statusSelect.value; // this will be "todo", "doing", or "done"
 
   // 2) Friendly validation: show inline messages + focus first invalid field
   clearErrors(); // reset any previous errors before checking again
-  var hasError = false;
+  let hasError = false;
   if (!newTitle) {
     showError(titleInput, titleError, "Title is required.");
     if (!hasError) { titleInput.focus(); } // focus the first invalid input
@@ -381,8 +381,8 @@ function onSave(e) {
   }
 
   // 3) Find the task in the array and update its properties.
-  // I use a classic for loop so it’s easy to read for beginners.
-  for (var i = 0; i < tasks.length; i++) {
+  // I use a classic for loop so it's easy to read for beginners.
+  for (let i = 0; i < tasks.length; i++) {
     if (tasks[i].id === activeTaskId) {
       tasks[i].title = newTitle;         // replace the old title with the new one
       tasks[i].description = newDesc;    // replace the old description
@@ -423,7 +423,7 @@ descInput.addEventListener("input", function () {
   }
 });
 
-// Bonus: pressing Escape should close the modal if it’s open.
+// Bonus: pressing Escape should close the modal if it's open.
 // (Only works when I'm currently editing a task.)
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape" && activeTaskId != null) {

@@ -24,7 +24,7 @@ A simple, beginner-friendly Kanban board that **dynamically renders tasks**, let
 ## 🧩 Tech Stack
 
 - **HTML/CSS**: Based on my **JSL03** layout & styles (no Tailwind, no frameworks).
-- **JavaScript**: Single-file (`scripts.js`) with plain DOM APIs, `var`, and classic `for` loops.
+- **JavaScript**: Single-file (`scripts.js`) with plain DOM APIs, `let` & `const`, and classic `for` loops.
 - **Assets**: Local SVGs and Google Fonts (Plus Jakarta Sans).
 
 ---
